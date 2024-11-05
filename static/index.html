@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Input App</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(155, 155, 133);
+        }
+        #microphone-icon {
+            font-size: 4rem;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+        #submit-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        #user-id {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size:larger;
+        }
+    </style>
+</head>
+<body>
+    <div id="user-id"></div>
+    <div>
+    <div id="microphone-icon">🎤</div>
+    <div id="transcript"></div>
+    <button id="submit-btn" style="display: none;">Check Calories</button>
+    <div id="result"></div>
+    </div>
+    <script>
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function setCookie(name, value, days, path = '/stevekamer') {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = `expires=${date.toUTCString()}`;
+        document.cookie = `${name}=${value}; ${expires}; path=${path}`;
+    }
+
+    let userId = getCookie('user_id');
+    if (!userId) {
+        userId = window.crypto.randomUUID();
+        setCookie('user_id', userId, 365, '/users');
+        console.log('New user ID generated and stored in cookie:', userId);
+    } else {
+        console.log('Existing User ID retrieved from cookie:', userId);
+    }
+
+    const userIdDiv = document.getElementById('user-id');
+    userIdDiv.textContent = `User ID: ${userId}`;
+
+    const microphoneIcon = document.getElementById('microphone-icon');
+    const transcriptDiv = document.getElementById('transcript');
+    const submitBtn = document.getElementById('submit-btn');
+    const resultDiv = document.getElementById('result');
+
+    let transcript = '';
+
+    // Check if the browser supports the Web Speech API
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Sorry, your browser does not support speech recognition.");
+    } else {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        microphoneIcon.addEventListener('click', () => {
+            recognition.start();
+        });
+
+        recognition.onstart = function() {
+            microphoneIcon.innerHTML = "🎙️ Listening...";
+        };
+
+        recognition.onspeechend = function() {
+            recognition.stop();
+            microphoneIcon.innerHTML = "🎤";
+        };
+
+        recognition.onresult = function(event) {
+            try {
+            transcript = event.results[0][0].transcript;
+            console.log('User said: ', transcript);
+            // console.log('For realz');
+            transcriptDiv.textContent = transcript;
+            submitBtn.style.display = 'block';
+        } catch (error) {
+            console.error('Error in onresult:', error);
+        } 
+    };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error', event.error);
+            microphoneIcon.innerHTML = "🎤";
+        };
+    }
+
+
+    submitBtn.addEventListener('click', async () => {
+    if (transcript) {
+        try {
+            const response = await fetch(`http://localhost:8000/api/calorie_count/${encodeURIComponent(transcript)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            const formattedResult = JSON.stringify(data, null, 2);
+            // let formattedResult = 'Nutrition:\n';
+            // for (const [key, value] of Object.entries(data)) {
+            //     formattedResult += `${key}: ${value}\n`;
+            // }
+            // resultDiv.textContent = `Nutrition:\n${formattedResult}`;
+            resultDiv.innerHTML = `<pre>\n${formattedResult}</pre>`;
+        } catch (error) {
+            console.error('Error:', error);
+            resultDiv.textContent = 'Error occurred while fetching calorie information.';
+        }
+    }
+});
+</script>
+
+</body>
+</html>
+

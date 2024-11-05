@@ -1,9 +1,26 @@
-# Healthcheck App
+# HEALTHCHECK
 
-## A Web based app to track caloric and nutritional intake
+## Track calories and nutrition using AI
 
-### Main Features
+## Structure
+```
+healthcheck
+├── README.md
+├── __pycache__
+│   └── app.cpython-311.pyc
+├── app
+│   ├── __pycache__
+│   │   └── main.cpython-311.pyc
+│   ├── api
+│   │   ├── models
+│   │   └── routes
+│   ├── main.py
+│   └── utils.py
+├── index.html
+├── static
+│   └── images
+│       └── favicon.ico
+├── templates
+└── tests
+```
 
-* uses chrome's built-in voice to text to capture user input of what they ate
-* uses public LLM to determine nutritional data for that food
-* streamlit app to display trends, data, etc.

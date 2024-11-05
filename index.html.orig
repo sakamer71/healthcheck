@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Input App</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        #microphone-icon {
+            font-size: 4rem;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+        #submit-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+    <div id="microphone-icon">🎤</div>
+    <div id="transcript"></div>
+    <button id="submit-btn" style="display: none;">Check Calories</button>
+    <div id="result"></div>
+    </div>
+    <script>
+        const microphoneIcon = document.getElementById('microphone-icon');
+
+        // Check if the browser supports the Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Sorry, your browser does not support speech recognition.");
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            microphoneIcon.addEventListener('click', () => {
+                recognition.start();
+            });
+
+            recognition.onstart = function() {
+                microphoneIcon.innerHTML = "🎙️ Listening...";
+            };
+
+            recognition.onspeechend = function() {
+                recognition.stop();
+                microphoneIcon.innerHTML = "🎤";
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                console.log('User said: ', transcript);
+                // You can send the transcript to your server for processing here
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                microphoneIcon.innerHTML = "🎤";
+            };
+        }
+    </script>
+
+</body>
+</html>
+

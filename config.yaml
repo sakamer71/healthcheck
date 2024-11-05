@@ -1,0 +1,75 @@
+models:
+  llm:
+    Claude 3 Sonnet:
+      model_id: "anthropic.claude-3-sonnet-20240229-v1:0"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 2048
+      memory_window: 3
+      max_top_k: 500
+      model_region: us-west-2
+    Claude 3 Haiku:
+      model_id: "anthropic.claude-3-haiku-20240307-v1:0"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 10
+      max_top_k: 500
+      model_region: us-west-2
+    Claude 3 Opus:
+      model_id: "anthropic.claude-3-opus-20240229-v1:0"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 10
+      max_top_k: 500
+      model_region: us-west-2
+    Llama3 70b:
+      model_id: "meta.llama3-70b-instruct-v1:0"
+      temperature: 0.5
+      top_p: 1.0
+      #top_k: 500   not supported by Llama3
+      #max_tokens: 4096   not supported by Llama3
+      memory_window: 3
+      max_top_k: 500
+      model_region: us-west-2
+    Claude 3.5 Sonnet:
+      model_id: "anthropic.claude-3-5-sonnet-20240620-v1:0"
+      temperature: 0.1
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 10
+      max_top_k: 500
+      model_region: us-east-1
+    default: Claude 3.5 Sonnet
+  embedding:
+    Cohere Embed English V3:
+      model_id: "cohere.embed-english-v3"
+      model_region: us-west-2
+    default: Cohere Embed English V3
+  rerank:
+    Cohere Rerank English V3:
+      model_id: 'rerank-english-v3.0'
+      model_region: us-west-2
+    default: Cohere Rerank English V3
+nutrition:
+  - name
+  - food group
+  - serving size
+  - calories
+  - total fat
+  - saturated fat
+  - trans fat
+  - carbohydrates
+  - fiber
+  - sugars
+  - protein
+  - cholesterol
+  - sodium
+database: 
+  name: nutrition_data
+

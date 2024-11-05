@@ -1,18 +1,40 @@
-# Virtual environment
+# Virtual Environment
+venv/
+env/
 .venv/
 
-# Python byte-compiled files
+# Python cache files
 __pycache__/
 *.py[cod]
+*$py.class
 
-# Distribution / packaging
-*.egg-info/
-dist/
-build/
+# Logs
+*.log
 
-# IDE-specific files (optional)
+# Environment variables
+.env
+
+# IDE specific files
 .vscode/
 .idea/
 
-# OS-specific files
+# OS generated files
 .DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Database files
+*.db
+*.sqlite3
+
+# Dependency directories
+node_modules/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
