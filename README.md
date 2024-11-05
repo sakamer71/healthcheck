@@ -2,6 +2,13 @@
 
 ## Track calories and nutrition using AI
 
+## to run
+source .venv/bin/activate
+fastapi dev app/main.py
+
+## routes
+http://localhost:8000/api/calorie_count/{meal}
+
 ## Structure
 ```
 healthcheck
