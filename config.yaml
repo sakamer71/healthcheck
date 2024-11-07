@@ -50,7 +50,7 @@ models:
       max_top_k: 500
       model_region: us-west-2
       model_endpoint:  "/healthcheck/api-endpoint/gpt-4o-realtime-preview"
-      model_api_key:  "/healthcheck/api-key/gpt-4o-realtime-preview"
+      model_api_key:  "/healthcheck/api-key/openai/gpt-4o-realtime-preview"
       model_deployment_name: gpt-4o-realtime-preview
 
     OpenAI GPT o1:
@@ -65,8 +65,9 @@ models:
       model_endpoint:  "/healthcheck/api-endpoint/gpt-o1"
       model_api_key:  "/healthcheck/api-key/gpt-01"
       model_deployment_name: o1-preview
-    #default: Claude 3.5 Sonnet v2
-    default: OpenAI GPT 4o Realtime Preview
+    #default: Claude 3.5 Haiku
+    #default: OpenAI GPT 4o Realtime Preview
+    default: OpenAI GPT 4o 
 
   embedding:
     Cohere Embed English V3:
