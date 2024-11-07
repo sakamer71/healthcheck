@@ -5,35 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Input App</title>
     <style>
-        body {
+       body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 10px; /* Add some padding for better mobile display */
             background-color: rgb(155, 155, 133);
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
+
         #microphone-icon {
             font-size: 4rem;
             cursor: pointer;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 1.2rem;
+
+        #result, #transcript, #user-id {
+            width: 90%; /* Make sure content fits within screen width */
+            word-wrap: break-word; /* Wrap text that is too long */
         }
+
         #submit-btn {
             margin-top: 10px;
             padding: 10px 20px;
             font-size: 1rem;
             cursor: pointer;
+            width: 100%; /* Full width on smaller screens */
+            max-width: 300px; /* Limit max width */
         }
-        #user-id {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: larger;
+
+        /* Add media query for smaller screens */
+        @media (max-width: 600px) {
+            #microphone-icon {
+                font-size: 3rem; /* Reduce icon size for smaller screens */
+            }
+
+            #submit-btn {
+                font-size: 0.9rem; /* Reduce button font size */
+                padding: 8px 16px;
+            }
+
+            #result, #transcript {
+                font-size: 1rem; /* Adjust text size */
+            }
         }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
 </head>
