@@ -123,7 +123,7 @@
     submitBtn.addEventListener('click', async () => {
     if (transcript) {
         try {
-            const response = await fetch(`http://localhost:8000/api/calorie_count/${encodeURIComponent(transcript)}`, {
+            const response = await fetch(`http://${window.location.hostname}:8000/api/calorie_count/${encodeURIComponent(transcript)}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

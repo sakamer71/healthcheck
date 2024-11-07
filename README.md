@@ -31,3 +31,5 @@ healthcheck
 └── tests
 ```
 
+run using
+docker run -d -p 9999:8000 -v ~/.aws:/root/.aws  healthcheck:0.1 
