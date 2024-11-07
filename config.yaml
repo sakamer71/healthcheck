@@ -1,32 +1,5 @@
 models:
   llm:
-    Claude 3 Sonnet:
-      model_id: "anthropic.claude-3-sonnet-20240229-v1:0"
-      temperature: 0.5
-      top_p: 1.0
-      top_k: 500
-      max_tokens: 2048
-      memory_window: 3
-      max_top_k: 500
-      model_region: us-west-2
-    Claude 3 Haiku:
-      model_id: "anthropic.claude-3-haiku-20240307-v1:0"
-      temperature: 0.5
-      top_p: 1.0
-      top_k: 500
-      max_tokens: 4096
-      memory_window: 10
-      max_top_k: 500
-      model_region: us-west-2
-    Claude 3 Opus:
-      model_id: "anthropic.claude-3-opus-20240229-v1:0"
-      temperature: 0.5
-      top_p: 1.0
-      top_k: 500
-      max_tokens: 4096
-      memory_window: 10
-      max_top_k: 500
-      model_region: us-west-2
     Llama3 70b:
       model_id: "meta.llama3-70b-instruct-v1:0"
       temperature: 0.5
@@ -36,16 +9,65 @@ models:
       memory_window: 3
       max_top_k: 500
       model_region: us-west-2
-    Claude 3.5 Sonnet:
-      model_id: "anthropic.claude-3-5-sonnet-20240620-v1:0"
+    Claude 3.5 Sonnet v2:
+      model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
       temperature: 0.1
       top_p: 1.0
       top_k: 500
       max_tokens: 4096
       memory_window: 10
       max_top_k: 500
-      model_region: us-east-1
-    default: Claude 3.5 Sonnet
+      model_region: us-west-2
+    Claude 3.5 Haiku:
+      model_id: "anthropic.claude-3-5-haiku-20241022-v1:0"
+      temperature: 0.1
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 10
+      max_top_k: 500
+      model_region: us-west-2
+    OpenAI GPT 4o:
+      model_id: "gpt-4o"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 3
+      max_top_k: 500
+      model_region: us-west-2
+      model_endpoint: "/healthcheck/api-endpoint/gpt-4o"
+      model_api_key: "/healthcheck/api-key/openai/gpt-4o"
+      model_deployment_name: gpt-4o
+
+    OpenAI GPT 4o Realtime Preview:
+      model_id: "gpt-4o-realtime-preview"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 3
+      max_top_k: 500
+      model_region: us-west-2
+      model_endpoint:  "/healthcheck/api-endpoint/gpt-4o-realtime-preview"
+      model_api_key:  "/healthcheck/api-key/gpt-4o-realtime-preview"
+      model_deployment_name: gpt-4o-realtime-preview
+
+    OpenAI GPT o1:
+      model_id: "gpt-o1"
+      temperature: 0.5
+      top_p: 1.0
+      top_k: 500
+      max_tokens: 4096
+      memory_window: 3
+      max_top_k: 500
+      model_region: us-west-2
+      model_endpoint:  "/healthcheck/api-endpoint/gpt-o1"
+      model_api_key:  "/healthcheck/api-key/gpt-01"
+      model_deployment_name: o1-preview
+    #default: Claude 3.5 Sonnet v2
+    default: OpenAI GPT 4o Realtime Preview
+
   embedding:
     Cohere Embed English V3:
       model_id: "cohere.embed-english-v3"
