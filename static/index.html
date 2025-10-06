@@ -58,24 +58,28 @@
             color: #15803D;
         }
 
-        /* Add styles for navigation */
-        .nav-collapsed {
-            width: 60px !important;
-            transition: width 0.3s ease;
+        /* Add styles for navigation - only on desktop */
+        @media (min-width: 768px) {
+            .nav-collapsed {
+                width: 60px !important;
+                transition: width 0.3s ease;
+            }
+            .nav-collapsed .nav-text,
+            .nav-collapsed h1,
+            .nav-collapsed p,
+            .nav-collapsed #user-id {
+                display: none;
+            }
+            .nav-collapsed .nav-link {
+                justify-content: center;
+                padding: 0.5rem;
+            }
         }
-        .nav-collapsed .nav-text,
-        .nav-collapsed h1,
-        .nav-collapsed p,
-        .nav-collapsed #user-id {
-            display: none;
-        }
-        .nav-collapsed .nav-link {
-            justify-content: center;
-            padding: 0.5rem;
-        }
-        .nav-collapsed + .flex-1 {
-            margin-left: 60px !important;
-            transition: margin-left 0.3s ease;
+        @media (min-width: 768px) {
+            .nav-collapsed + .flex-1 {
+                margin-left: 60px !important;
+                transition: margin-left 0.3s ease;
+            }
         }
         #nav-toggle {
             position: fixed;
@@ -90,10 +94,16 @@
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             z-index: 50;
-            display: flex;
+            display: none; /* Hidden on mobile by default */
             align-items: center;
             justify-content: center;
             transition: left 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            #nav-toggle {
+                display: flex; /* Show on desktop */
+            }
         }
         .nav-collapsed ~ #nav-toggle {
             left: 44px;
@@ -122,7 +132,7 @@
 
     <div class="flex min-h-screen">
         <!-- Left Navigation -->
-        <div id="left-nav" class="w-80 bg-white shadow-md fixed h-full overflow-y-auto nav-collapsed -translate-x-full md:translate-x-0 z-40" style="transition: width 0.3s ease, transform 0.3s ease;">
+        <div id="left-nav" class="w-80 bg-white shadow-md fixed h-full overflow-y-auto -translate-x-full md:translate-x-0 z-40" style="transition: width 0.3s ease, transform 0.3s ease;">
             <div class="p-6">
                 <div class="mb-4">
                     <h1 class="text-2xl font-bold text-green-700 mb-2">BigBack NutriTrack</h1>
@@ -233,7 +243,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 ml-80 p-8">
+        <div class="flex-1 md:ml-80 p-4 md:p-8 pt-16 md:pt-8">
             <!-- Main Section -->
             <div id="main-content" class="max-w-4xl mx-auto">
                 <!-- Input Section -->
@@ -317,13 +327,46 @@
             const toggle = document.getElementById('nav-toggle');
             const toggleIcon = toggle.querySelector('svg path');
             nav.classList.toggle('nav-collapsed');
-            
+
             if (nav.classList.contains('nav-collapsed')) {
                 toggleIcon.setAttribute('d', 'M9 5l7 7-7 7');
             } else {
                 toggleIcon.setAttribute('d', 'M15 19l-7-7 7-7');
             }
         }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('left-nav');
+            const backdrop = document.getElementById('mobile-backdrop');
+            const isOpen = !nav.classList.contains('-translate-x-full');
+
+            if (isOpen) {
+                nav.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            } else {
+                nav.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+            }
+        }
+
+        // Setup mobile menu listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const backdrop = document.getElementById('mobile-backdrop');
+
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            backdrop.addEventListener('click', toggleMobileMenu);
+
+            // Close mobile menu when clicking nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 768) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+        });
     </script>
 
     <!-- JavaScript Modules -->
