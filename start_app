@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# start_app script for healthcheck FastAPI application
+# Based on the tokengen service pattern
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOGS_DIR="$SCRIPT_DIR/logs"
+PIDFILE="$LOGS_DIR/healthcheck.pid"
+LOGFILE="$LOGS_DIR/healthcheck.log"
+UV_BIN="/home/ubuntu/.local/bin/uv"
+
+# Create logs directory if it doesn't exist
+mkdir -p "$LOGS_DIR"
+
+# Check if already running
+if [ -f "$PIDFILE" ]; then
+    PID=$(cat "$PIDFILE")
+    if kill -0 "$PID" 2>/dev/null; then
+        echo "Healthcheck app is already running (PID: $PID)"
+        exit 1
+    else
+        echo "Removing stale PID file"
+        rm -f "$PIDFILE"
+    fi
+fi
+
+# Change to the application directory
+cd "$SCRIPT_DIR"
+
+# Start the FastAPI application with uvicorn
+echo "Starting healthcheck FastAPI application..."
+nohup "$UV_BIN" run uvicorn app.main:app --host 0.0.0.0 --port 8002 > "$LOGFILE" 2>&1 &
+
+# Save the PID
+echo $! > "$PIDFILE"
+
+echo "Healthcheck app started with PID: $(cat "$PIDFILE")"
+echo "Log file: $LOGFILE"

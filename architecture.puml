@@ -1,0 +1,89 @@
+@startuml HealthCheck Calorie Counter
+
+' Styling
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam roundcorner 10
+
+' Title
+title HealthCheck - Calorie Counter Architecture
+
+' Components
+package "Frontend (Static)" {
+    [index.html] as UI
+    package "JavaScript Modules" {
+        [app.js] as App
+        [nutrition.js] as Nutrition
+        [meal-list.js] as MealList
+        [daily-totals.js] as DailyTotals
+        [trends.js] as Trends
+        [profile.js] as Profile
+    }
+}
+
+package "Backend (FastAPI)" {
+    [main.py] as Main
+    package "API Routes" {
+        [calorie_count.py] as CalorieRoute
+        [profile_rda.py] as ProfileRoute
+    }
+    package "Services" {
+        [db_utils.py] as DBUtils
+    }
+    package "Models" {
+        [transaction.py] as Transaction
+    }
+}
+
+database "SQLite" {
+    [Meals]
+    [User Profiles]
+}
+
+cloud "External Services" {
+    [OpenAI API] as OpenAI
+}
+
+' Relationships
+UI --> App : uses
+App --> Nutrition : manages
+App --> MealList : manages
+App --> DailyTotals : manages
+App --> Trends : manages
+App --> Profile : manages
+
+Nutrition --> CalorieRoute : HTTP requests
+MealList --> CalorieRoute : HTTP requests
+Profile --> ProfileRoute : HTTP requests
+DailyTotals --> CalorieRoute : HTTP requests
+Trends --> CalorieRoute : HTTP requests
+
+Main --> CalorieRoute : routes
+Main --> ProfileRoute : routes
+CalorieRoute --> DBUtils : uses
+ProfileRoute --> DBUtils : uses
+DBUtils --> Transaction : uses
+DBUtils --> Meals : CRUD
+DBUtils --> [User Profiles] : CRUD
+
+CalorieRoute --> OpenAI : nutrition analysis
+
+' Notes
+note right of UI
+  Responsive web interface
+  with collapsible navigation
+end note
+
+note right of OpenAI
+  Used for meal analysis
+  and calorie estimation
+end note
+
+note right of DBUtils
+  Handles all database
+  operations and timezone
+  conversions
+end note
+
+@enduml

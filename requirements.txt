@@ -1,0 +1,6 @@
+fastapi[standard]
+boto3
+sqlalchemy
+openai
+beautifulsoup4
+requests

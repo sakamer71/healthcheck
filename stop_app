@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# stop_app script for healthcheck FastAPI application
+# Based on the tokengen service pattern
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOGS_DIR="$SCRIPT_DIR/logs"
+PIDFILE="$LOGS_DIR/healthcheck.pid"
+
+# Check if PID file exists
+if [ ! -f "$PIDFILE" ]; then
+    echo "Healthcheck app is not running (no PID file found)"
+    exit 1
+fi
+
+# Read the PID
+PID=$(cat "$PIDFILE")
+
+# Check if process is actually running
+if ! kill -0 "$PID" 2>/dev/null; then
+    echo "Healthcheck app is not running (stale PID file)"
+    rm -f "$PIDFILE"
+    exit 1
+fi
+
+# Stop the process
+echo "Stopping healthcheck app (PID: $PID)..."
+kill "$PID"
+
+# Wait for process to stop gracefully
+for i in {1..10}; do
+    if ! kill -0 "$PID" 2>/dev/null; then
+        echo "Healthcheck app stopped successfully"
+        rm -f "$PIDFILE"
+        exit 0
+    fi
+    sleep 1
+done
+
+# Force kill if still running
+echo "Forcing stop of healthcheck app..."
+kill -9 "$PID" 2>/dev/null
+rm -f "$PIDFILE"
+echo "Healthcheck app forcefully stopped"
